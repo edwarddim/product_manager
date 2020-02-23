@@ -1,10 +1,12 @@
 import React from 'react';
 import './App.css';
 
+import ProductManager from "./components/ProductManager"
+
 function App() {
   return (
-    <div className="App">
-      
+    <div className="container">
+      <ProductManager/>
     </div>
   );
 }
