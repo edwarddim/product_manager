@@ -1,9 +1,11 @@
-import React, {useState, useEffect} from 'react'
-import { Link } from '@reach/router';
+import React, {useEffect, useContext} from 'react'
 import axios from 'axios'
+import TaskContext from '../contexts/TaskContext'
 
-const ProdList = () =>{
-    const [listState, setListState] = useState([])
+import ListItem from './ListItem'
+
+const ProdList = (props) =>{
+    const {listState, setListState, submitState} = useContext(TaskContext)
 
     useEffect(() => {
         axios.get("http://localhost:8000/api/products")
@@ -11,36 +13,11 @@ const ProdList = () =>{
                 setListState(res.data)
             })
             .catch(err => console.log('ERR: ', err))
-    }, [])
+    }, [submitState])
 
-    const deleteProduct = (id) =>{
-        axios.delete(`http://localhost:8000/api/products/${id}`)
-            .then(res => {
-                removeFromDom(id)
-            })
-            .catch(err => {
-                console.log("ERR: ", err)
-            })
-    }
-
-    const removeFromDom = id => {
-        setListState(listState.filter(prod => prod._id !== id));
-    }
-
-    return (listState.length === 0) ? <h1>Loading</h1> :
+    return (listState.length === 0) ? null :
     listState.map((item, i)=> (
-        <div key={i}>
-            <p>Title: {item.title}</p>
-            <p>Price: {item.price}</p>
-            <p>Desc: {item.description}</p>
-            <Link to={"/products/"+item._id}>
-                Details
-            </Link>
-            <Link to={"/products/"+item._id+"/edit"}>
-                Edit
-            </Link>
-            <button onClick={(e) => deleteProduct(item._id) } >Delete</button>
-        </div>
+        <ListItem key={i} item={item}  />
     ))
 }
 export default ProdList;

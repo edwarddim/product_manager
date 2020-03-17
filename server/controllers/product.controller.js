@@ -1,7 +1,7 @@
 const Prod = require("../models/product.model")
 
 module.exports.allProducts = (req, res) =>{
-    Prod.find()
+    Prod.find({})
         .then(allProds => {
             res.json(allProds)
         })
